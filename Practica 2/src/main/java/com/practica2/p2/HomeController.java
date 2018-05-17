@@ -2,6 +2,7 @@ package com.practica2.p2;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -40,8 +41,19 @@ public class HomeController {
 		return "testparking";
 	}
 
-	
-	
+	@RequestMapping (value= "/coste/{matricula}", method= RequestMethod.GET)
+	public @ResponseBody String coste (@PathVariable (value="matricula") String matricula, Model model){
+		double precio;
+		double tarifa=0.005;
+		Timestamp entrada=dao.buscaCoche(matricula,0).getTimestamp();
+		Timestamp salida=dao.buscaCoche(matricula, 1).getTimestamp();
+		
+		double tiempo=entrada.getTime()-salida.getTime();
+		precio=tiempo*tarifa;
+		
+		String coste=Double.toString(precio);
+	return coste;
+	}
 	
 	
 	@RequestMapping (value="/coche/crear", method = RequestMethod.POST)
